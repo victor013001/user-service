@@ -10,9 +10,6 @@ class ArchetypeGradleApplicationTests {
 
   @Test
   void contextLoads() {
-    /**
-     * This method is intentionally left empty to verify that the Spring application context loads
-     * correctly.
-     */
+    // This method is intentionally left empty to verify that the Spring application context loads
   }
 }
