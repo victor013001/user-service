@@ -44,7 +44,8 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
-	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4'
 
 	//DATABASE
 	runtimeOnly 'org.postgresql:postgresql'
