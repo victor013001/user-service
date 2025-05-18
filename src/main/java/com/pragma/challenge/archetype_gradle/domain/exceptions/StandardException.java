@@ -16,6 +16,7 @@ public class StandardException extends RuntimeException {
     this.httpStatus = serverResponses.getHttpStatus();
     this.standardError =
         StandardError.builder()
+            .code(serverResponses.getCode())
             .timestamp(LocalDateTime.now())
             .description(serverResponses.getMessage())
             .build();

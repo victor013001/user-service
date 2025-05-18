@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class GlobalErrorHandler implements ErrorWebExceptionHandler {
-  private static final String LOG_PREFIX = "[ERROR_HANDLER] >>> ";
+  private static final String LOG_PREFIX = "[ERROR_HANDLER] >>>";
 
   private final DefaultServerResponseContext serverResponseContext;
 
