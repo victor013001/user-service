@@ -40,7 +40,7 @@ management:
 
 service:
   base-url: baseUrl
-  timeout: 500
+  timeout: 1000
 
 resilience4j.circuitbreaker:
   circuit-breaker-aspect-order: 1

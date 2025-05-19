@@ -1,5 +1,6 @@
 package com.pragma.challenge.archetype_gradle.domain.enums;
 
+import com.pragma.challenge.archetype_gradle.domain.constants.Constants;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,15 +8,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ServerResponses {
-  BAD_REQUEST(
-      "E000",
-      HttpStatus.BAD_REQUEST,
-      "The request could not be processed due to invalid or incomplete data."),
-  SERVER_ERROR(
-      "E001",
-      HttpStatus.INTERNAL_SERVER_ERROR,
-      "An unexpected server error occurred. Please try again later."),
-  RESOURCE_NOT_FOUND("E002", HttpStatus.NOT_FOUND, "The requested resource was not found.");
+  BAD_REQUEST("E000", HttpStatus.BAD_REQUEST, Constants.BAD_REQUEST_MSG),
+  SERVER_ERROR("E001", HttpStatus.INTERNAL_SERVER_ERROR, Constants.SERVER_ERROR_MSG),
+  RESOURCE_NOT_FOUND("E002", HttpStatus.NOT_FOUND, Constants.RESOURCE_NOT_FOUND_MSG);
 
   private final String code;
   private final HttpStatus httpStatus;
