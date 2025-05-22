@@ -1,4 +1,4 @@
-package com.pragma.challenge.user_service.infrastructure.adapters.service.config;
+package com.pragma.challenge.user_service.infrastructure.adapters.bootcamp_service.config;
 
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -16,6 +16,6 @@ public class RetryConfiguration {
 
   @Bean
   public Retry retryPolicy() {
-    return retryRegistry.retry("serviceRetry");
+    return retryRegistry.retry("bootcampServiceRetry");
   }
 }

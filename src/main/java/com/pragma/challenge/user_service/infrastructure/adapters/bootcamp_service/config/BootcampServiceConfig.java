@@ -1,9 +1,9 @@
-package com.pragma.challenge.user_service.infrastructure.adapters.service.config;
+package com.pragma.challenge.user_service.infrastructure.adapters.bootcamp_service.config;
 
 import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-import com.pragma.challenge.user_service.infrastructure.adapters.service.util.ServiceProperties;
+import com.pragma.challenge.user_service.infrastructure.adapters.bootcamp_service.util.BootcampServiceProperties;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import java.time.Duration;
@@ -19,17 +19,18 @@ import reactor.netty.http.client.HttpClient;
 
 @Configuration
 @RequiredArgsConstructor
-public class ServiceConfig {
+public class BootcampServiceConfig {
 
-  private final ServiceProperties serviceProperties;
+  private final BootcampServiceProperties bootcampServiceProperties;
 
   @Bean
   public WebClient webClient() {
     return WebClient.builder()
-        .baseUrl(serviceProperties.getBaseUrl())
+        .baseUrl(bootcampServiceProperties.getBaseUrl())
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-        .clientConnector(getClientHttpConnector(Integer.parseInt(serviceProperties.getTimeout())))
+        .clientConnector(
+            getClientHttpConnector(Integer.parseInt(bootcampServiceProperties.getTimeout())))
         .build();
   }
 

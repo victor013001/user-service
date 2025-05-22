@@ -1,4 +1,4 @@
-package com.pragma.challenge.user_service.infrastructure.adapters.service.config;
+package com.pragma.challenge.user_service.infrastructure.adapters.bootcamp_service.config;
 
 import io.github.resilience4j.bulkhead.Bulkhead;
 import io.github.resilience4j.bulkhead.BulkheadRegistry;
@@ -16,6 +16,6 @@ public class BulkheadConfiguration {
 
   @Bean
   public Bulkhead serviceBulkhead() {
-    return bulkheadRegistry.bulkhead("serviceBulkhead");
+    return bulkheadRegistry.bulkhead("bootcampServiceBulkhead");
   }
 }
