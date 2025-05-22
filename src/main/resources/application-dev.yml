@@ -38,8 +38,8 @@ management:
     refresh:
       enabled: false
 
-service:
-  base-url: baseUrl
+bootcamp-service:
+  base-url: http://localhost:8082/bootcamp-service/
   timeout: 1000
 
 resilience4j.circuitbreaker:
@@ -48,7 +48,7 @@ resilience4j.circuitbreaker:
     default:
       register-health-indicator: true
   instances:
-    service:
+    bootcampService:
       base-config: default
       failure-rate-threshold: 50
       slow-call-rate-threshold: 50
@@ -72,7 +72,7 @@ resilience4j:
         maxWaitDuration: 10000ms
         initialInterval: 500ms
       instances:
-        serviceRetry:
+        bootcampServiceRetry:
           maxAttempts: 5
           waitDuration: 1000ms
           enableExponentialBackoff: true
@@ -85,6 +85,6 @@ resilience4j:
         maxConcurrentCalls: 10
         maxWaitDuration: 500ms
     instances:
-      serviceBulkhead:
+      bootcampServiceBulkhead:
         maxConcurrentCalls: 5
         maxWaitDuration: 1s
