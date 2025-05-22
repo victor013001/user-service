@@ -14,14 +14,12 @@ public enum ServerResponses {
       "E001",
       org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR,
       ConstantsMsg.SERVER_ERROR_MSG),
-  RESOURCE_NOT_FOUND(
-      "E002", org.springframework.http.HttpStatus.NOT_FOUND, ConstantsMsg.RESOURCE_NOT_FOUND_MSG),
   GATEWAY_ERROR(
-      "E003",
+      "E002",
       org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR,
       ConstantsMsg.GATEWAY_ERROR_MSG),
   GATEWAY_BAD_REQUEST(
-      "E004",
+      "E003",
       org.springframework.http.HttpStatus.BAD_REQUEST,
       ConstantsMsg.GATEWAY_BAD_REQUEST_MSG),
   SUCCESS_REGISTER_TO_BOOTCAMP(
