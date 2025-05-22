@@ -43,7 +43,7 @@ public class BootcampServiceAdapter implements BootcampServiceGateway {
         .uri(
             uriBuilder -> {
               UriBuilder builder =
-                  uriBuilder.path(ConstantsGateway.BOOTCAMP_SERVICE_BASE_URL + "/exists");
+                  uriBuilder.path(ConstantsGateway.BOOTCAMP_SERVICE_BASE_PATH + "/exists");
               bootcampIds.forEach(id -> builder.queryParam(ConstantsGateway.ID_PARAM, id));
               return builder.build();
             })
