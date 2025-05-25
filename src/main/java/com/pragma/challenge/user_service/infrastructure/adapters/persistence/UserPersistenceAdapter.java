@@ -50,4 +50,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         .map(userBootcampEntityMapper::toModel)
         .as(transactionalOperator::transactional);
   }
+
+  @Override
+  public Mono<Long> findBootcampIdWithHigherNumberUsers() {
+    log.info("{} Finding bootcamp id with the higher numbers of user", LOG_PREFIX);
+    return userBootcampRepository.findBootcampIdWithHigherNumberUsers();
+  }
 }

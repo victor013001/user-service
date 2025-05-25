@@ -13,8 +13,11 @@ import com.pragma.challenge.user_service.infrastructure.entrypoints.handler.User
 import com.pragma.challenge.user_service.infrastructure.entrypoints.mapper.RegisterBootcampMapper;
 import com.pragma.challenge.user_service.infrastructure.entrypoints.mapper.ServerResponseMapper;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -53,23 +56,18 @@ public class UserHandlerImpl implements UserHandler {
                     ServerResponses.SUCCESS_REGISTER_TO_BOOTCAMP.getMessage(),
                     null,
                     responseMapper))
-        .doOnError(
-            ex ->
-                log.error(
-                    "{} Exception {} caught. Caused by: {}",
-                    LOG_PREFIX,
-                    ex.getClass().getSimpleName(),
-                    ex.getMessage()))
-        .onErrorResume(
-            StandardException.class,
-            ex -> buildResponse(ex.getHttpStatus(), null, ex.getStandardError(), responseMapper))
-        .onErrorResume(
-            ex ->
-                buildResponse(
-                    ServerResponses.SERVER_ERROR.getHttpStatus(),
-                    null,
-                    buildStandardError(ServerResponses.SERVER_ERROR),
-                    responseMapper));
+        .doOnError(logErrorHandler())
+        .onErrorResume(StandardException.class, standardErrorHandler())
+        .onErrorResume(genericErrorHandler());
+  }
+
+  @Override
+  public Mono<ServerResponse> getBootcampWithHigherNumberUsers(ServerRequest request) {
+    return userServicePort
+        .getBootcampIdWithHigherNumberUsers()
+        .flatMap(bootcampId -> buildResponse(HttpStatus.OK, bootcampId, null, responseMapper))
+        .doOnError(logErrorHandler())
+        .onErrorResume(genericErrorHandler());
   }
 
   private Long mockUserIdFromAuthorization(ServerRequest serverRequest) {
@@ -86,5 +84,27 @@ public class UserHandlerImpl implements UserHandler {
               }
             })
         .orElseThrow(BadRequest::new);
+  }
+
+  private Consumer<Throwable> logErrorHandler() {
+    return ex ->
+        log.error(
+            "{} Exception {} caught. Caused by: {}",
+            LOG_PREFIX,
+            ex.getClass().getSimpleName(),
+            ex.getMessage());
+  }
+
+  private Function<StandardException, Mono<ServerResponse>> standardErrorHandler() {
+    return ex -> buildResponse(ex.getHttpStatus(), null, ex.getStandardError(), responseMapper);
+  }
+
+  private Function<Throwable, Mono<ServerResponse>> genericErrorHandler() {
+    return ex ->
+        buildResponse(
+            ServerResponses.SERVER_ERROR.getHttpStatus(),
+            null,
+            buildStandardError(ServerResponses.SERVER_ERROR),
+            responseMapper);
   }
 }

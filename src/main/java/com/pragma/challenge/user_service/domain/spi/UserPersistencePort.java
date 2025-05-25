@@ -9,4 +9,6 @@ public interface UserPersistencePort {
   Flux<Long> filterUnrelatedBootcamps(Long userId, List<Long> longs);
 
   Mono<UserBootcamp> registerBootcamp(UserBootcamp userBootcamp);
+
+  Mono<Long> findBootcampIdWithHigherNumberUsers();
 }
