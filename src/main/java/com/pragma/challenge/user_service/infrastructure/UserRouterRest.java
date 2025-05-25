@@ -1,5 +1,6 @@
 package com.pragma.challenge.user_service.infrastructure;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.path;
 import static org.springframework.web.reactive.function.server.RouterFunctions.nest;
@@ -76,11 +77,43 @@ public class UserRouterRest {
                                   @Schema(
                                       implementation =
                                           SwaggerResponses.DefaultErrorResponse.class)))
+                })),
+    @RouterOperation(
+        path = ConstantsRoute.BASE_PATH + ConstantsRoute.BOOTCAMP_PATH,
+        method = RequestMethod.GET,
+        beanClass = UserHandler.class,
+        beanMethod = "getBootcampWithHigherNumberUsers",
+        operation =
+            @Operation(
+                operationId = "getBootcampWithHigherNumberUsers",
+                summary = "Get bootcamp id with higher number of users",
+                responses = {
+                  @ApiResponse(
+                      responseCode = "201",
+                      content =
+                          @Content(
+                              mediaType = MediaType.APPLICATION_JSON_VALUE,
+                              schema =
+                                  @Schema(
+                                      implementation =
+                                          SwaggerResponses.DefaultLongResponse.class))),
+                  @ApiResponse(
+                      responseCode = "500",
+                      description = ConstantsMsg.SERVER_ERROR_MSG,
+                      content =
+                          @Content(
+                              mediaType = MediaType.APPLICATION_JSON_VALUE,
+                              schema =
+                                  @Schema(
+                                      implementation =
+                                          SwaggerResponses.DefaultErrorResponse.class)))
                 }))
   })
   public RouterFunction<ServerResponse> routerFunction(UserHandler userHandler) {
     return nest(
         path(ConstantsRoute.BASE_PATH),
-        route(POST(ConstantsRoute.BOOTCAMP_PATH), userHandler::registerToBootcamp));
+        route(POST(ConstantsRoute.BOOTCAMP_PATH), userHandler::registerToBootcamp)
+            .andRoute(
+                GET(ConstantsRoute.BOOTCAMP_PATH), userHandler::getBootcampWithHigherNumberUsers));
   }
 }

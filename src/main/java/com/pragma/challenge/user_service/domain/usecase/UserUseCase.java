@@ -55,6 +55,11 @@ public class UserUseCase implements UserServicePort {
                     .subscribeOn(Schedulers.boundedElastic()));
   }
 
+  @Override
+  public Mono<Long> getBootcampIdWithHigherNumberUsers() {
+    return userPersistencePort.findBootcampIdWithHigherNumberUsers();
+  }
+
   private final Mono<Void> updateUserCount(List<Long> bootcampIds) {
     return reportServiceGateway.updateBootcampsUserCount(new BootcampIdList(bootcampIds));
   }

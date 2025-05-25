@@ -6,4 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface UserHandler {
   Mono<ServerResponse> registerToBootcamp(ServerRequest request);
+
+  Mono<ServerResponse> getBootcampWithHigherNumberUsers(ServerRequest request);
 }

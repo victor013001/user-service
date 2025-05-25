@@ -24,4 +24,11 @@ public final class SwaggerResponses {
   public static class DefaultErrorResponse {
     private StandardError error;
   }
+
+  @Data
+  @Schema(name = "DefaultLongResponse")
+  @AllArgsConstructor
+  public static class DefaultLongResponse {
+    private Long data;
+  }
 }

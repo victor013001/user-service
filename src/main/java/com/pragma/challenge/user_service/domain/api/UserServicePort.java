@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono;
 public interface UserServicePort {
 
   Mono<List<UserBootcamp>> registerBootcamp(Long userId, RegisterBootcamp registerBootcamp);
+
+  Mono<Long> getBootcampIdWithHigherNumberUsers();
 }
