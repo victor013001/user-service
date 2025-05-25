@@ -2,6 +2,7 @@ package com.pragma.challenge.user_service.application.config;
 
 import com.pragma.challenge.user_service.domain.api.UserServicePort;
 import com.pragma.challenge.user_service.domain.spi.BootcampServiceGateway;
+import com.pragma.challenge.user_service.domain.spi.ReportServiceGateway;
 import com.pragma.challenge.user_service.domain.spi.UserPersistencePort;
 import com.pragma.challenge.user_service.domain.usecase.UserUseCase;
 import com.pragma.challenge.user_service.infrastructure.adapters.persistence.UserPersistenceAdapter;
@@ -22,8 +23,10 @@ public class UseCasesConfig {
 
   @Bean
   public UserServicePort userServicePort(
-      UserPersistencePort userPersistencePort, BootcampServiceGateway bootcampServiceGateway) {
-    return new UserUseCase(userPersistencePort, bootcampServiceGateway);
+      UserPersistencePort userPersistencePort,
+      BootcampServiceGateway bootcampServiceGateway,
+      ReportServiceGateway reportServiceGateway) {
+    return new UserUseCase(userPersistencePort, bootcampServiceGateway, reportServiceGateway);
   }
 
   @Bean

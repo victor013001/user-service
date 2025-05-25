@@ -15,7 +15,7 @@ public class BulkheadConfiguration {
   }
 
   @Bean
-  public Bulkhead serviceBulkhead() {
+  public Bulkhead bootcampServiceBulkhead() {
     return bulkheadRegistry.bulkhead("bootcampServiceBulkhead");
   }
 }
