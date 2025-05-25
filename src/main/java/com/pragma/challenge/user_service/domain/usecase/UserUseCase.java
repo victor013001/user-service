@@ -2,20 +2,25 @@ package com.pragma.challenge.user_service.domain.usecase;
 
 import com.pragma.challenge.user_service.domain.api.UserServicePort;
 import com.pragma.challenge.user_service.domain.exceptions.standard_exception.BadRequest;
+import com.pragma.challenge.user_service.domain.model.BootcampIdList;
 import com.pragma.challenge.user_service.domain.model.RegisterBootcamp;
 import com.pragma.challenge.user_service.domain.model.UserBootcamp;
 import com.pragma.challenge.user_service.domain.spi.BootcampServiceGateway;
+import com.pragma.challenge.user_service.domain.spi.ReportServiceGateway;
 import com.pragma.challenge.user_service.domain.spi.UserPersistencePort;
 import com.pragma.challenge.user_service.domain.validation.ValidListAnnotation;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @RequiredArgsConstructor
 public class UserUseCase implements UserServicePort {
 
   private final UserPersistencePort userPersistencePort;
   private final BootcampServiceGateway bootcampServiceGateway;
+  private final ReportServiceGateway reportServiceGateway;
 
   @Override
   public Mono<List<UserBootcamp>> registerBootcamp(Long userId, RegisterBootcamp registerBootcamp) {
@@ -39,6 +44,18 @@ public class UserUseCase implements UserServicePort {
                                     bootcampId ->
                                         userPersistencePort.registerBootcamp(
                                             new UserBootcamp(userId, bootcampId)))
-                                .collectList()));
+                                .collectList()))
+        .doOnSuccess(
+            userBootcamps ->
+                updateUserCount(
+                        userBootcamps.stream()
+                            .map(UserBootcamp::bootcampId)
+                            .distinct()
+                            .collect(Collectors.toList()))
+                    .subscribeOn(Schedulers.boundedElastic()));
+  }
+
+  private final Mono<Void> updateUserCount(List<Long> bootcampIds) {
+    return reportServiceGateway.updateBootcampsUserCount(new BootcampIdList(bootcampIds));
   }
 }

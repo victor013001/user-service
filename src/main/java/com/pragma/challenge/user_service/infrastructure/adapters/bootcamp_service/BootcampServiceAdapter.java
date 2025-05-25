@@ -12,8 +12,8 @@ import io.github.resilience4j.reactor.retry.RetryOperator;
 import io.github.resilience4j.retry.Retry;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -23,13 +23,21 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class BootcampServiceAdapter implements BootcampServiceGateway {
   private static final String LOG_PREFIX = "[BOOTCAMP_SERVICE_GATEWAY] >>>";
 
   private final WebClient webClient;
   private final Retry retry;
   private final Bulkhead bulkhead;
+
+  public BootcampServiceAdapter(
+      @Qualifier("webClient") WebClient webClient,
+      @Qualifier("retryPolicy") Retry retry,
+      @Qualifier("bootcampServiceBulkhead") Bulkhead bulkhead) {
+    this.webClient = webClient;
+    this.retry = retry;
+    this.bulkhead = bulkhead;
+  }
 
   @Override
   @CircuitBreaker(name = "bootcampService", fallbackMethod = "fallback")
