@@ -5,6 +5,7 @@ import com.pragma.challenge.user_service.domain.exceptions.standard_exception.Ba
 import com.pragma.challenge.user_service.domain.model.BootcampIdList;
 import com.pragma.challenge.user_service.domain.model.RegisterBootcamp;
 import com.pragma.challenge.user_service.domain.model.UserBootcamp;
+import com.pragma.challenge.user_service.domain.model.UserEmail;
 import com.pragma.challenge.user_service.domain.spi.BootcampServiceGateway;
 import com.pragma.challenge.user_service.domain.spi.ReportServiceGateway;
 import com.pragma.challenge.user_service.domain.spi.UserPersistencePort;
@@ -12,9 +13,11 @@ import com.pragma.challenge.user_service.domain.validation.ValidListAnnotation;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+@Slf4j
 @RequiredArgsConstructor
 public class UserUseCase implements UserServicePort {
 
@@ -52,12 +55,18 @@ public class UserUseCase implements UserServicePort {
                             .map(UserBootcamp::bootcampId)
                             .distinct()
                             .collect(Collectors.toList()))
-                    .subscribeOn(Schedulers.boundedElastic()));
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .subscribe(null, ex -> log.error("Unable to update report")));
   }
 
   @Override
   public Mono<Long> getBootcampIdWithHigherNumberUsers() {
     return userPersistencePort.findBootcampIdWithHigherNumberUsers();
+  }
+
+  @Override
+  public Mono<List<UserEmail>> getBootcampUsers(Long bootcampId) {
+    return userPersistencePort.findBootcampUsers(bootcampId);
   }
 
   private final Mono<Void> updateUserCount(List<Long> bootcampIds) {

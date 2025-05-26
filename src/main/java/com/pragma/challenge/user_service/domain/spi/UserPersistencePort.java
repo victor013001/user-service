@@ -1,6 +1,7 @@
 package com.pragma.challenge.user_service.domain.spi;
 
 import com.pragma.challenge.user_service.domain.model.UserBootcamp;
+import com.pragma.challenge.user_service.domain.model.UserEmail;
 import java.util.List;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -11,4 +12,6 @@ public interface UserPersistencePort {
   Mono<UserBootcamp> registerBootcamp(UserBootcamp userBootcamp);
 
   Mono<Long> findBootcampIdWithHigherNumberUsers();
+
+  Mono<List<UserEmail>> findBootcampUsers(Long bootcampId);
 }

@@ -2,6 +2,7 @@ package com.pragma.challenge.user_service.domain.api;
 
 import com.pragma.challenge.user_service.domain.model.RegisterBootcamp;
 import com.pragma.challenge.user_service.domain.model.UserBootcamp;
+import com.pragma.challenge.user_service.domain.model.UserEmail;
 import java.util.List;
 import reactor.core.publisher.Mono;
 
@@ -10,4 +11,6 @@ public interface UserServicePort {
   Mono<List<UserBootcamp>> registerBootcamp(Long userId, RegisterBootcamp registerBootcamp);
 
   Mono<Long> getBootcampIdWithHigherNumberUsers();
+
+  Mono<List<UserEmail>> getBootcampUsers(Long bootcampId);
 }

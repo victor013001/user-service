@@ -1,9 +1,12 @@
 package com.pragma.challenge.user_service.infrastructure.adapters.persistence;
 
 import com.pragma.challenge.user_service.domain.model.UserBootcamp;
+import com.pragma.challenge.user_service.domain.model.UserEmail;
 import com.pragma.challenge.user_service.domain.spi.UserPersistencePort;
 import com.pragma.challenge.user_service.infrastructure.adapters.persistence.mapper.UserBootcampEntityMapper;
+import com.pragma.challenge.user_service.infrastructure.adapters.persistence.mapper.UserEntityMapper;
 import com.pragma.challenge.user_service.infrastructure.adapters.persistence.repository.UserBootcampRepository;
+import com.pragma.challenge.user_service.infrastructure.adapters.persistence.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,8 @@ public class UserPersistenceAdapter implements UserPersistencePort {
   private final UserBootcampRepository userBootcampRepository;
   private final UserBootcampEntityMapper userBootcampEntityMapper;
   private final TransactionalOperator transactionalOperator;
+  private final UserRepository userRepository;
+  private final UserEntityMapper userEntityMapper;
 
   @Override
   public Flux<Long> filterUnrelatedBootcamps(Long userId, List<Long> bootcampIds) {
@@ -55,5 +60,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
   public Mono<Long> findBootcampIdWithHigherNumberUsers() {
     log.info("{} Finding bootcamp id with the higher numbers of user", LOG_PREFIX);
     return userBootcampRepository.findBootcampIdWithHigherNumberUsers();
+  }
+
+  @Override
+  public Mono<List<UserEmail>> findBootcampUsers(Long bootcampId) {
+    log.info("{} Finding bootcamp id: {} users", LOG_PREFIX, bootcampId);
+    return userRepository.findByBootcampId(bootcampId).map(userEntityMapper::toModel).collectList();
   }
 }

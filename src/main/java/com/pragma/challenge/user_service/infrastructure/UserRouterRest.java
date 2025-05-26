@@ -12,6 +12,8 @@ import com.pragma.challenge.user_service.infrastructure.entrypoints.dto.Register
 import com.pragma.challenge.user_service.infrastructure.entrypoints.handler.UserHandler;
 import com.pragma.challenge.user_service.infrastructure.entrypoints.util.SwaggerResponses;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -107,6 +109,43 @@ public class UserRouterRest {
                                   @Schema(
                                       implementation =
                                           SwaggerResponses.DefaultErrorResponse.class)))
+                })),
+    @RouterOperation(
+        path = ConstantsRoute.BASE_PATH + ConstantsRoute.BOOTCAMP_PATH,
+        method = RequestMethod.GET,
+        beanClass = UserHandler.class,
+        beanMethod = "getBootcampUsers",
+        operation =
+            @Operation(
+                operationId = "getBootcampUsers",
+                summary = "Get bootcamp id users",
+                parameters = {
+                  @Parameter(
+                      in = ParameterIn.PATH,
+                      name = "bootcampId",
+                      description = "Bootcamp IDs to find users",
+                      required = true)
+                },
+                responses = {
+                  @ApiResponse(
+                      responseCode = "201",
+                      content =
+                          @Content(
+                              mediaType = MediaType.APPLICATION_JSON_VALUE,
+                              schema =
+                                  @Schema(
+                                      implementation =
+                                          SwaggerResponses.DefaultLongResponse.class))),
+                  @ApiResponse(
+                      responseCode = "500",
+                      description = ConstantsMsg.SERVER_ERROR_MSG,
+                      content =
+                          @Content(
+                              mediaType = MediaType.APPLICATION_JSON_VALUE,
+                              schema =
+                                  @Schema(
+                                      implementation =
+                                          SwaggerResponses.DefaultErrorResponse.class)))
                 }))
   })
   public RouterFunction<ServerResponse> routerFunction(UserHandler userHandler) {
@@ -114,6 +153,9 @@ public class UserRouterRest {
         path(ConstantsRoute.BASE_PATH),
         route(POST(ConstantsRoute.BOOTCAMP_PATH), userHandler::registerToBootcamp)
             .andRoute(
-                GET(ConstantsRoute.BOOTCAMP_PATH), userHandler::getBootcampWithHigherNumberUsers));
+                GET(ConstantsRoute.BOOTCAMP_PATH), userHandler::getBootcampWithHigherNumberUsers)
+            .andRoute(
+                GET(ConstantsRoute.BOOTCAMP_PATH + "/{bootcampId}"),
+                userHandler::getBootcampUsers));
   }
 }

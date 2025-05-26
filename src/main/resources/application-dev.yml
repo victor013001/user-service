@@ -43,7 +43,7 @@ bootcamp-service:
   timeout: 1000
 
 report-service:
-  base-url: http://localhost:8080/report-service/
+  base-url: http://localhost:8085/report-service/
   timeout: 1000
 
 resilience4j.circuitbreaker:
@@ -114,3 +114,6 @@ resilience4j:
       reportServiceBulkhead:
         maxConcurrentCalls: 5
         maxWaitDuration: 1s
+
+server:
+  port: 8084

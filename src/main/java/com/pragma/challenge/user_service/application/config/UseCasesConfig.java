@@ -7,7 +7,9 @@ import com.pragma.challenge.user_service.domain.spi.UserPersistencePort;
 import com.pragma.challenge.user_service.domain.usecase.UserUseCase;
 import com.pragma.challenge.user_service.infrastructure.adapters.persistence.UserPersistenceAdapter;
 import com.pragma.challenge.user_service.infrastructure.adapters.persistence.mapper.UserBootcampEntityMapper;
+import com.pragma.challenge.user_service.infrastructure.adapters.persistence.mapper.UserEntityMapper;
 import com.pragma.challenge.user_service.infrastructure.adapters.persistence.repository.UserBootcampRepository;
+import com.pragma.challenge.user_service.infrastructure.adapters.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,8 @@ public class UseCasesConfig {
   private final UserBootcampRepository userBootcampRepository;
   private final UserBootcampEntityMapper userBootcampEntityMapper;
   private final TransactionalOperator transactionalOperator;
+  private final UserRepository userRepository;
+  private final UserEntityMapper userEntityMapper;
 
   @Bean
   public UserServicePort userServicePort(
@@ -32,6 +36,10 @@ public class UseCasesConfig {
   @Bean
   public UserPersistencePort userPersistencePort() {
     return new UserPersistenceAdapter(
-        userBootcampRepository, userBootcampEntityMapper, transactionalOperator);
+        userBootcampRepository,
+        userBootcampEntityMapper,
+        transactionalOperator,
+        userRepository,
+        userEntityMapper);
   }
 }

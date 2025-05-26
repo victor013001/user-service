@@ -8,4 +8,6 @@ public interface UserHandler {
   Mono<ServerResponse> registerToBootcamp(ServerRequest request);
 
   Mono<ServerResponse> getBootcampWithHigherNumberUsers(ServerRequest request);
+
+  Mono<ServerResponse> getBootcampUsers(ServerRequest request);
 }

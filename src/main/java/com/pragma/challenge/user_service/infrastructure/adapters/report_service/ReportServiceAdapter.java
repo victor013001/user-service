@@ -37,6 +37,7 @@ public class ReportServiceAdapter implements ReportServiceGateway {
     this.bulkhead = bulkhead;
   }
 
+  @Override
   public Mono<Void> updateBootcampsUserCount(BootcampIdList bootcampIds) {
     log.info(
         "{} Starting report update for bootcamp ids: {} in Report Service.",
