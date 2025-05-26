@@ -12,6 +12,7 @@ import com.pragma.challenge.user_service.infrastructure.entrypoints.dto.Register
 import com.pragma.challenge.user_service.infrastructure.entrypoints.handler.UserHandler;
 import com.pragma.challenge.user_service.infrastructure.entrypoints.mapper.RegisterBootcampMapper;
 import com.pragma.challenge.user_service.infrastructure.entrypoints.mapper.ServerResponseMapper;
+import com.pragma.challenge.user_service.infrastructure.entrypoints.util.ParseUtil;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -66,6 +67,16 @@ public class UserHandlerImpl implements UserHandler {
     return userServicePort
         .getBootcampIdWithHigherNumberUsers()
         .flatMap(bootcampId -> buildResponse(HttpStatus.OK, bootcampId, null, responseMapper))
+        .doOnError(logErrorHandler())
+        .onErrorResume(genericErrorHandler());
+  }
+
+  @Override
+  public Mono<ServerResponse> getBootcampUsers(ServerRequest request) {
+    String id = request.pathVariable("bootcampId");
+    return Mono.just(ParseUtil.toLong(id))
+        .flatMap(userServicePort::getBootcampUsers)
+        .flatMap(userEmails -> buildResponse(HttpStatus.OK, userEmails, null, responseMapper))
         .doOnError(logErrorHandler())
         .onErrorResume(genericErrorHandler());
   }
